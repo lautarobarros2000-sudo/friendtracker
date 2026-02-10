@@ -5,10 +5,14 @@
   <title>Encuentros</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Iconos -->
+  <link rel="icon" href="icon.png" />
+  <link rel="apple-touch-icon" href="icon.png" />
+
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -17,7 +21,7 @@
     <button id="toggleFormBtn">➕ Agregar encuentro</button>
   </header>
 
-  <!-- HOME -->
+  <!-- DASHBOARD -->
   <section id="dashboard">
     <div class="card">
       <h2>Total encuentros</h2>
@@ -30,18 +34,36 @@
     </div>
   </section>
 
+  <!-- GRAFICO POR DIA -->
   <section class="card">
     <h2>Encuentros por día</h2>
     <canvas id="chart"></canvas>
   </section>
 
-  <!-- FORM -->
+  <!-- GRAFICO POR ACTIVIDAD -->
+  <section class="card">
+    <h2>Encuentros por actividad</h2>
+    <canvas id="categoryChart"></canvas>
+  </section>
+
+  <!-- FORMULARIO -->
   <section id="formSection" class="card hidden">
     <h2>Nuevo encuentro</h2>
 
     <form id="encuentroForm">
       <label>Fecha</label>
       <input type="date" id="fecha" required />
+
+      <label>Actividad</label>
+      <select id="categoria" required>
+        <option value="">Seleccionar</option>
+        <option value="Deporte">⚽ Deporte</option>
+        <option value="Cena">🍽️ Cena</option>
+        <option value="Mate">☕ Mate / charla</option>
+        <option value="Viaje">🏖️ Viaje</option>
+        <option value="Evento">🎉 Evento</option>
+        <option value="Otro">📦 Otro</option>
+      </select>
 
       <label>Descripción</label>
       <input type="text" id="descripcion" placeholder="Ej: pádel + cena" required />
@@ -50,7 +72,7 @@
     </form>
   </section>
 
-  <!-- LISTA -->
+  <!-- HISTORIAL -->
   <section class="card">
     <h2>Historial</h2>
     <ul id="listaEncuentros"></ul>
