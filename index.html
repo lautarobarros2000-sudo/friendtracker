@@ -2,75 +2,59 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
+  <title>Encuentros</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Friend Tracker</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <main>
-    <h1>Friend Tracker</h1>
 
-    <!-- HOME / DASHBOARD -->
-    <section class="stats">
-      <div class="stat">
-        <span id="totalEncounters">0</span>
-        <small>Veces que lo vi</small>
-      </div>
-      <div class="stat">
-        <span id="totalDays">0</span>
-        <small>Días distintos</small>
-      </div>
-    </section>
+  <header>
+    <h1>📅 Encuentros</h1>
+    <button id="toggleFormBtn">➕ Agregar encuentro</button>
+  </header>
 
-    <section class="chart">
-      <h2>Encuentros por día</h2>
-      <div id="chartBars" class="bars"></div>
-    </section>
+  <!-- HOME -->
+  <section id="dashboard">
+    <div class="card">
+      <h2>Total encuentros</h2>
+      <p id="totalEncuentros">0</p>
+    </div>
 
-    <button id="showFormBtn">➕ Agregar encuentro</button>
+    <div class="card">
+      <h2>Días distintos</h2>
+      <p id="diasVistos">0</p>
+    </div>
+  </section>
 
-    <!-- FORMULARIO -->
-    <section class="form hidden" id="formSection">
-      <h2>Agregar encuentro</h2>
+  <section class="card">
+    <h2>Encuentros por día</h2>
+    <canvas id="chart"></canvas>
+  </section>
 
-      <button type="button" id="closeFormBtn">✖ Cerrar</button>
+  <!-- FORM -->
+  <section id="formSection" class="card hidden">
+    <h2>Nuevo encuentro</h2>
 
-      <form id="encounterForm">
-        <label>
-          Fecha
-          <input type="date" id="dateInput" required />
-        </label>
+    <form id="encuentroForm">
+      <label>Fecha</label>
+      <input type="date" id="fecha" required />
 
-        <label>
-          Hora
-          <input type="time" id="timeInput" />
-        </label>
+      <label>Descripción</label>
+      <input type="text" id="descripcion" placeholder="Ej: pádel + cena" required />
 
-        <label>
-          Tipo
-          <select id="typeInput">
-            <option value="comida">🍽️ Comida</option>
-            <option value="deporte">🏓 Deporte</option>
-            <option value="viaje">✈️ Viaje</option>
-            <option value="social">🍺 Social</option>
-          </select>
-        </label>
+      <button type="submit">Guardar</button>
+    </form>
+  </section>
 
-        <label>
-          Nota
-          <input type="text" id="noteInput" placeholder="Ej: Pádel + cena" />
-        </label>
-
-        <button type="submit">Guardar encuentro</button>
-      </form>
-    </section>
-
-    <!-- HISTORIAL -->
-    <section class="history">
-      <h2>Historial</h2>
-      <div id="historyList"></div>
-    </section>
-  </main>
+  <!-- LISTA -->
+  <section class="card">
+    <h2>Historial</h2>
+    <ul id="listaEncuentros"></ul>
+  </section>
 
   <script src="app.js"></script>
 </body>
