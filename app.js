@@ -4,13 +4,18 @@ const dateInput = document.getElementById('dateInput');
 const timeInput = document.getElementById('timeInput');
 const typeInput = document.getElementById('typeInput');
 const noteInput = document.getElementById('noteInput');
-const addBtn = document.getElementById('addBtn');
 
 const totalEncountersEl = document.getElementById('totalEncounters');
 const totalDaysEl = document.getElementById('totalDays');
 const historyList = document.getElementById('historyList');
+const chartBars = document.getElementById('chartBars');
 
-// Fecha por defecto: hoy
+const formSection = document.getElementById('formSection');
+const showFormBtn = document.getElementById('showFormBtn');
+const closeFormBtn = document.getElementById('closeFormBtn');
+const form = document.getElementById('encounterForm');
+
+// Fecha por defecto
 dateInput.valueAsDate = new Date();
 
 function getEncounters() {
@@ -22,8 +27,6 @@ function saveEncounters(data) {
 }
 
 function addEncounter() {
-  if (!dateInput.value) return;
-
   const encounter = {
     id: crypto.randomUUID(),
     date: dateInput.value,
@@ -39,6 +42,9 @@ function addEncounter() {
   noteInput.value = '';
   timeInput.value = '';
 
+  formSection.classList.add('hidden');
+  showFormBtn.classList.remove('hidden');
+
   render();
 }
 
@@ -50,9 +56,7 @@ function deleteEncounter(id) {
 
 function renderStats(data) {
   totalEncountersEl.textContent = data.length;
-
-  const uniqueDays = new Set(data.map(e => e.date));
-  totalDaysEl.textContent = uniqueDays.size;
+  totalDaysEl.textContent = new Set(data.map(e => e.date)).size;
 }
 
 function renderHistory(data) {
@@ -95,12 +99,49 @@ function renderHistory(data) {
     });
 }
 
+function renderChart(data) {
+  chartBars.innerHTML = '';
+
+  const counts = {};
+  data.forEach(e => {
+    counts[e.date] = (counts[e.date] || 0) + 1;
+  });
+
+  const max = Math.max(...Object.values(counts), 1);
+
+  Object.keys(counts)
+    .sort()
+    .slice(-7)
+    .forEach(date => {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = `${(counts[date] / max) * 100}%`;
+      bar.textContent = counts[date];
+      chartBars.appendChild(bar);
+    });
+}
+
 function render() {
   const data = getEncounters();
   renderStats(data);
   renderHistory(data);
+  renderChart(data);
 }
 
-addBtn.addEventListener('click', addEncounter);
+// EVENTOS
+showFormBtn.onclick = () => {
+  formSection.classList.remove('hidden');
+  showFormBtn.classList.add('hidden');
+};
+
+closeFormBtn.onclick = () => {
+  formSection.classList.add('hidden');
+  showFormBtn.classList.remove('hidden');
+};
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  addEncounter();
+});
 
 render();
