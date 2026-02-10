@@ -70,7 +70,8 @@ form {
   gap: 10px;
 }
 
-input {
+input,
+select {
   padding: 8px;
   border-radius: 6px;
   border: 1px solid #ccc;
@@ -99,4 +100,3 @@ li span {
   font-size: 12px;
   padding: 6px 8px;
 }
-
