@@ -1,5 +1,6 @@
 let encuentros = JSON.parse(localStorage.getItem("encuentros")) || [];
 let chart;
+let categoryChart;
 
 const totalEncuentrosEl = document.getElementById("totalEncuentros");
 const diasVistosEl = document.getElementById("diasVistos");
@@ -17,10 +18,11 @@ form.addEventListener("submit", (e) => {
 
   const fecha = document.getElementById("fecha").value;
   const descripcion = document.getElementById("descripcion").value;
+  const categoria = document.getElementById("categoria").value;
 
-  encuentros.push({ fecha, descripcion });
-
+  encuentros.push({ fecha, descripcion, categoria });
   localStorage.setItem("encuentros", JSON.stringify(encuentros));
+
   form.reset();
   formSection.classList.add("hidden");
 
@@ -34,52 +36,62 @@ function borrarEncuentro(index) {
 }
 
 function render() {
-  // métricas
   totalEncuentrosEl.textContent = encuentros.length;
 
   const diasUnicos = new Set(encuentros.map(e => e.fecha));
   diasVistosEl.textContent = diasUnicos.size;
 
-  // lista
   lista.innerHTML = "";
   encuentros.forEach((e, i) => {
     const li = document.createElement("li");
     li.innerHTML = `
-      <span>${e.fecha} – ${e.descripcion}</span>
+      <span>${e.fecha} – ${e.categoria} – ${e.descripcion}</span>
       <button class="delete" onclick="borrarEncuentro(${i})">✕</button>
     `;
     lista.appendChild(li);
   });
 
-  renderChart();
+  renderDayChart();
+  renderCategoryChart();
 }
 
-function renderChart() {
+function renderDayChart() {
   const counts = {};
   encuentros.forEach(e => {
     counts[e.fecha] = (counts[e.fecha] || 0) + 1;
   });
-
-  const labels = Object.keys(counts);
-  const data = Object.values(counts);
 
   if (chart) chart.destroy();
 
   chart = new Chart(document.getElementById("chart"), {
     type: "bar",
     data: {
-      labels,
+      labels: Object.keys(counts),
       datasets: [{
-        label: "Encuentros",
-        data,
-        borderWidth: 1
+        data: Object.values(counts)
       }]
     },
     options: {
-      responsive: true,
-      plugins: {
-        legend: { display: false }
-      }
+      plugins: { legend: { display: false } }
+    }
+  });
+}
+
+function renderCategoryChart() {
+  const counts = {};
+  encuentros.forEach(e => {
+    counts[e.categoria] = (counts[e.categoria] || 0) + 1;
+  });
+
+  if (categoryChart) categoryChart.destroy();
+
+  categoryChart = new Chart(document.getElementById("categoryChart"), {
+    type: "pie",
+    data: {
+      labels: Object.keys(counts),
+      datasets: [{
+        data: Object.values(counts)
+      }]
     }
   });
 }
