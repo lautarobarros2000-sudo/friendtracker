@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Friend Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main>
+    <h1>Friend Tracker</h1>
+
+    <section class="stats">
+      <div class="stat">
+        <span id="totalEncounters">0</span>
+        <small>Veces que lo vi</small>
+      </div>
+      <div class="stat">
+        <span id="totalDays">0</span>
+        <small>Días distintos</small>
+      </div>
+    </section>
+
+    <section class="form">
+      <h2>Agregar encuentro</h2>
+
+      <label>
+        Fecha
+        <input type="date" id="dateInput" />
+      </label>
+
+      <label>
+        Hora
+        <input type="time" id="timeInput" />
+      </label>
+
+      <label>
+        Tipo
+        <select id="typeInput">
+          <option value="comida">🍽️ Comida</option>
+          <option value="deporte">🏓 Deporte</option>
+          <option value="viaje">✈️ Viaje</option>
+          <option value="social">🍺 Social</option>
+        </select>
+      </label>
+
+      <label>
+        Nota
+        <input type="text" id="noteInput" placeholder="Ej: Pádel + cena" />
+      </label>
