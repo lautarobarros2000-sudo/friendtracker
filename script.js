@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
 
   // ===============================
+  // CONFIG
+  // ===============================
+  const YEAR_GOAL = 150;
+
+  // ===============================
   // SUPABASE
   // ===============================
   const supabase = window.supabase.createClient(
@@ -25,9 +30,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const totalEncountersEl = document.getElementById("totalEncounters");
   const totalDaysEl = document.getElementById("totalDays");
+  const activeDaysEl = document.getElementById("activeDays");
+  const goalDaysEl = document.getElementById("goalDays");
+  const paceEl = document.getElementById("pace");
 
   const categoryChartCtx = document.getElementById("categoryChart");
   let categoryChart = null;
+
+  goalDaysEl.textContent = YEAR_GOAL;
 
   // ===============================
   // TOGGLE FORM
@@ -94,11 +104,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // STATS
+  // STATS + OBJETIVO
   // ===============================
   function renderStats(data) {
+    const uniqueDays = new Set(data.map(e => e.date)).size;
+
     totalEncountersEl.textContent = data.length;
-    totalDaysEl.textContent = new Set(data.map(e => e.date)).size;
+    totalDaysEl.textContent = uniqueDays;
+    activeDaysEl.textContent = uniqueDays;
+
+    // Ritmo
+    const today = new Date();
+    const start = new Date(today.getFullYear(), 0, 1);
+    const dayOfYear =
+      Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+
+    const expectedByNow = Math.round((YEAR_GOAL / 365) * dayOfYear);
+
+    if (uniqueDays >= expectedByNow) {
+      paceEl.textContent = "🔥 En ritmo";
+      paceEl.className = "pace good";
+    } else {
+      paceEl.textContent = "⚠️ Atrasado";
+      paceEl.className = "pace bad";
+    }
   }
 
   // ===============================
@@ -114,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const grouped = {};
     data.forEach(e => {
-      const key = e.date.slice(0, 7); // YYYY-MM
+      const key = e.date.slice(0, 7);
       grouped[key] ||= [];
       grouped[key].push(e);
     });
@@ -169,23 +198,10 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "pie",
       data: {
         labels: Object.keys(counts),
-        datasets: [{
-          data: Object.values(counts),
-          backgroundColor: [
-            "#6c63ff",
-            "#ff9800",
-            "#4caf50",
-            "#03a9f4",
-            "#e91e63",
-            "#9c27b0"
-          ]
-        }]
+        datasets: [{ data: Object.values(counts) }]
       }
     });
   }
 
-  // ===============================
-  // INIT
-  // ===============================
   load();
 });
