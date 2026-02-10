@@ -1,109 +1,101 @@
 * {
   box-sizing: border-box;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, sans-serif;
 }
 
 body {
   margin: 0;
   padding: 20px;
-  background: #f6f6f6;
+  background: #f4f6f8;
+  color: #222;
 }
 
-main {
-  max-width: 600px;
-  margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 h1 {
-  text-align: center;
-}
-
-.stats {
-  display: flex;
-  justify-content: space-around;
-  margin: 20px 0;
-}
-
-.stat {
-  text-align: center;
-}
-
-.stat span {
-  font-size: 2.5rem;
-  font-weight: bold;
+  margin: 0;
 }
 
 button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  font-size: 1rem;
+  background: #111;
+  color: white;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 8px;
   cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+#dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #555;
+}
+
+.card p {
+  font-size: 32px;
+  margin: 10px 0 0;
+  font-weight: bold;
 }
 
 .hidden {
   display: none;
 }
 
-/* FORM */
-.form label {
-  display: block;
-  margin-bottom: 10px;
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.form input,
-.form select {
-  width: 100%;
+input {
   padding: 8px;
-  margin-top: 4px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
-#closeFormBtn {
-  background: none;
-  border: none;
-  text-align: right;
-  font-size: 0.9rem;
-  cursor: pointer;
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-/* HISTORIAL */
-.history {
-  margin-top: 30px;
-}
-
-.day {
-  margin-bottom: 15px;
-}
-
-.encounter {
+li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-left: 10px;
-  font-size: 0.9rem;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
 }
 
-/* GRÁFICO SIMPLE */
-.chart {
-  margin: 20px 0;
+li span {
+  font-size: 14px;
 }
 
-.bars {
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-  height: 120px;
-  padding: 10px 0;
-}
-
-.bar {
-  flex: 1;
-  background: #4a90e2;
-  text-align: center;
-  color: white;
-  font-size: 0.7rem;
-  border-radius: 4px 4px 0 0;
+.delete {
+  background: #e74c3c;
+  font-size: 12px;
+  padding: 6px 8px;
 }
