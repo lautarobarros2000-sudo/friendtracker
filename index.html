@@ -21,7 +21,7 @@
     <button id="toggleFormBtn">➕ Agregar encuentro</button>
   </header>
 
-  <!-- FORMULARIO -->
+  <!-- FORM -->
   <section id="formSection" class="hidden">
     <form id="encounterForm">
       <label>
@@ -30,7 +30,7 @@
       </label>
 
       <label>
-        Tipo de actividad
+        Actividad
         <select id="category" required>
           <option value="">Seleccionar</option>
           <option value="Padel">Padel</option>
@@ -44,14 +44,15 @@
 
       <label>
         Nota
-        <textarea
-          id="note"
-          placeholder="¿Qué hicieron exactamente?"
-          rows="3"
-        ></textarea>
+        <textarea id="note" rows="3"></textarea>
       </label>
 
-      <button type="submit">Guardar encuentro</button>
+      <label class="important">
+        <input type="checkbox" id="important" />
+        Marcar como importante ⭐
+      </label>
+
+      <button type="submit">Guardar</button>
     </form>
   </section>
 
@@ -61,26 +62,37 @@
       <h2>Total encuentros</h2>
       <span id="totalEncounters">0</span>
     </div>
-
     <div>
       <h2>Días distintos</h2>
       <span id="totalDays">0</span>
     </div>
   </section>
 
-  <!-- LISTADO -->
-  <section class="list">
-    <h2>Encuentros por día</h2>
-    <div id="encountersList"></div>
-  </section>
-
-  <!-- GRAFICO -->
+  <!-- CHART -->
   <section class="chart-section">
     <h2>Encuentros por categoría</h2>
     <canvas id="categoryChart"></canvas>
   </section>
 
-  <!-- TU SCRIPT -->
+  <!-- LIST -->
+  <section class="list">
+    <div class="list-header">
+      <h2>Historial</h2>
+
+      <select id="filterCategory">
+        <option value="">Todas las categorías</option>
+        <option value="Padel">Padel</option>
+        <option value="Cena">Cena</option>
+        <option value="Fútbol">Fútbol</option>
+        <option value="Rancho">Rancho</option>
+        <option value="Viaje">Viaje</option>
+        <option value="Otro">Otro</option>
+      </select>
+    </div>
+
+    <div id="encountersList"></div>
+  </section>
+
   <script src="script.js"></script>
 </body>
 </html>
