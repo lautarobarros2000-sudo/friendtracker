@@ -2,82 +2,62 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>Encuentros</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Encuentros</title>
 
-  <!-- Iconos -->
-  <link rel="icon" href="icon.png" />
-  <link rel="apple-touch-icon" href="icon.png" />
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="logo.png" />
 </head>
 <body>
 
-  <header>
+  <header class="header">
     <h1>📅 Encuentros</h1>
     <button id="toggleFormBtn">➕ Agregar encuentro</button>
   </header>
 
-  <!-- DASHBOARD -->
-  <section id="dashboard">
-    <div class="card">
-      <h2>Total encuentros</h2>
-      <p id="totalEncuentros">0</p>
-    </div>
-
-    <div class="card">
-      <h2>Días distintos</h2>
-      <p id="diasVistos">0</p>
-    </div>
-  </section>
-
-  <!-- GRAFICO POR DIA -->
-  <section class="card">
-    <h2>Encuentros por día</h2>
-    <canvas id="chart"></canvas>
-  </section>
-
-  <!-- GRAFICO POR ACTIVIDAD -->
-  <section class="card">
-    <h2>Encuentros por actividad</h2>
-    <canvas id="categoryChart"></canvas>
-  </section>
-
   <!-- FORMULARIO -->
-  <section id="formSection" class="card hidden">
-    <h2>Nuevo encuentro</h2>
+  <section id="formSection" class="hidden">
+    <form id="encounterForm">
+      <label>
+        Fecha
+        <input type="date" id="date" required />
+      </label>
 
-    <form id="encuentroForm">
-      <label>Fecha</label>
-      <input type="date" id="fecha" required />
+      <label>
+        Tipo de actividad
+        <select id="category" required>
+          <option value="">Seleccionar</option>
+          <option value="Padel">Padel</option>
+          <option value="Cena">Cena</option>
+          <option value="Fútbol">Fútbol</option>
+          <option value="Rancho">Rancho</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </label>
 
-      <label>Actividad</label>
-      <select id="categoria" required>
-        <option value="">Seleccionar</option>
-        <option value="Deporte">⚽ Deporte</option>
-        <option value="Cena">🍽️ Cena</option>
-        <option value="Mate">☕ Mate / charla</option>
-        <option value="Viaje">🏖️ Viaje</option>
-        <option value="Evento">🎉 Evento</option>
-        <option value="Otro">📦 Otro</option>
-      </select>
-
-      <label>Descripción</label>
-      <input type="text" id="descripcion" placeholder="Ej: pádel + cena" required />
-
-      <button type="submit">Guardar</button>
+      <button type="submit">Guardar encuentro</button>
     </form>
   </section>
 
-  <!-- HISTORIAL -->
-  <section class="card">
-    <h2>Historial</h2>
-    <ul id="listaEncuentros"></ul>
+  <!-- STATS -->
+  <section class="stats">
+    <div>
+      <h2>Total encuentros</h2>
+      <span id="totalEncounters">0</span>
+    </div>
+
+    <div>
+      <h2>Días distintos</h2>
+      <span id="totalDays">0</span>
+    </div>
   </section>
 
-  <script src="app.js"></script>
+  <!-- LISTADO -->
+  <section class="list">
+    <h2>Encuentros por día</h2>
+    <div id="encountersList"></div>
+  </section>
+
+  <script src="script.js"></script>
 </body>
 </html>
