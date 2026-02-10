@@ -45,7 +45,7 @@ form {
   gap: 12px;
 }
 
-input, select {
+input, select, textarea {
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -88,4 +88,15 @@ form button {
   padding: 12px;
   border-radius: 10px;
   margin-bottom: 8px;
+}
+
+.encounter-item small {
+  color: #666;
+}
+
+.chart-section {
+  padding: 16px;
+  background: white;
+  margin: 16px;
+  border-radius: 12px;
 }
