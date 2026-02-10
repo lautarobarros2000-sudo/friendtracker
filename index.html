@@ -10,6 +10,9 @@
 
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -41,7 +44,11 @@
 
       <label>
         Nota
-        <textarea id="note" placeholder="¿Qué hicieron exactamente?" rows="3"></textarea>
+        <textarea
+          id="note"
+          placeholder="¿Qué hicieron exactamente?"
+          rows="3"
+        ></textarea>
       </label>
 
       <button type="submit">Guardar encuentro</button>
@@ -73,6 +80,7 @@
     <canvas id="categoryChart"></canvas>
   </section>
 
+  <!-- TU SCRIPT -->
   <script src="script.js"></script>
 </body>
 </html>
