@@ -1,114 +1,107 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ===============================
-  // SUPABASE CONFIG (UNA SOLA VEZ)
-  // ===============================
-  const SUPABASE_URL = "https://jvefzcnujhpqgyedmmxp.supabase.co";
-  const SUPABASE_ANON_KEY =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2ZWZ6Y251amhwcWd5ZWRtbXhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NDAwODYsImV4cCI6MjA4NjMxNjA4Nn0.uA4GjxOThyoEbps9W2zcZfhHY6DNCS-QE_SgtpeDB5s";
-
   const supabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
+    "https://jvefzcnujhpqgyedmmxp.supabase.co",
+    "TU_ANON_KEY"
   );
 
-  // ===============================
-  // DOM
-  // ===============================
   const toggleFormBtn = document.getElementById("toggleFormBtn");
   const formSection = document.getElementById("formSection");
-  const encounterForm = document.getElementById("encounterForm");
+  const form = document.getElementById("encounterForm");
+  const listEl = document.getElementById("encountersList");
+  const filterCategory = document.getElementById("filterCategory");
 
-  const encountersList = document.getElementById("encountersList");
   const totalEncountersEl = document.getElementById("totalEncounters");
   const totalDaysEl = document.getElementById("totalDays");
 
-  const categoryChartCtx = document.getElementById("categoryChart");
-  let categoryChart = null;
+  let categoryChart;
 
-  // ===============================
-  // TOGGLE FORM
-  // ===============================
-  toggleFormBtn.addEventListener("click", () => {
+  toggleFormBtn.onclick = () =>
     formSection.classList.toggle("hidden");
 
-    if (!formSection.classList.contains("hidden")) {
-      formSection.scrollIntoView({ behavior: "smooth" });
-    }
-  });
-
-  // ===============================
-  // SUBMIT
-  // ===============================
-  encounterForm.addEventListener("submit", async (e) => {
+  form.onsubmit = async e => {
     e.preventDefault();
 
-    const date = document.getElementById("date").value;
-    const category = document.getElementById("category").value;
-    const note = document.getElementById("note").value;
+    const data = {
+      date: date.value,
+      category: category.value,
+      note: note.value,
+      important: important.checked
+    };
 
-    if (!date || !category) return;
-
-    const { error } = await supabase.from("encounters").insert([
-      { date, category, note }
-    ]);
-
-    if (error) {
-      console.error(error);
-      return;
-    }
-
-    encounterForm.reset();
+    await supabase.from("encounters").insert([data]);
+    form.reset();
     formSection.classList.add("hidden");
-    loadEncounters();
-  });
+    load();
+  };
 
-  // ===============================
-  // LOAD
-  // ===============================
-  async function loadEncounters() {
-    const { data, error } = await supabase
+  filterCategory.onchange = load;
+
+  async function load() {
+    const { data } = await supabase
       .from("encounters")
       .select("*")
       .order("date", { ascending: false });
 
-    if (error) {
-      console.error(error);
-      return;
-    }
+    const filtered = filterCategory.value
+      ? data.filter(e => e.category === filterCategory.value)
+      : data;
 
-    renderAll(data);
+    renderStats(data);
+    renderList(filtered);
+    renderChart(data);
   }
 
-  function renderAll(encounters) {
-    renderList(encounters);
-    renderStats(encounters);
-    renderCategoryChart(encounters);
+  function renderStats(data) {
+    totalEncountersEl.textContent = data.length;
+    totalDaysEl.textContent = new Set(data.map(e => e.date)).size;
   }
 
-  function renderList(encounters) {
-    encountersList.innerHTML = "";
-    encounters.forEach(e => {
+  function renderList(data) {
+    listEl.innerHTML = "";
+
+    const grouped = {};
+    data.forEach(e => {
+      const key = e.date.slice(0, 7);
+      grouped[key] ||= [];
+      grouped[key].push(e);
+    });
+
+    Object.keys(grouped).forEach(month => {
       const div = document.createElement("div");
-      div.className = "encounter-item";
+      div.className = "month-group";
+
       div.innerHTML = `
-        <strong>${formatDate(e.date)} — ${e.category}</strong>
-        ${e.note ? `<div class="note">${e.note}</div>` : ""}
+        <div class="month-title">${month}</div>
+        <table>
+          <tbody>
+            ${grouped[month].map(e => `
+              <tr>
+                <td>${new Date(e.date).toLocaleDateString()}</td>
+                <td>${e.category}</td>
+                <td>${e.note || ""}</td>
+                <td>${e.important ? "⭐" : ""}</td>
+                <td>
+                  <button class="delete-btn" onclick="deleteEncounter('${e.id}')">🗑️</button>
+                </td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
       `;
-      encountersList.appendChild(div);
+      listEl.appendChild(div);
     });
   }
 
-  function renderStats(encounters) {
-    totalEncountersEl.textContent = encounters.length;
-    totalDaysEl.textContent = new Set(encounters.map(e => e.date)).size;
-  }
+  window.deleteEncounter = async id => {
+    if (!confirm("¿Borrar encuentro?")) return;
+    await supabase.from("encounters").delete().eq("id", id);
+    load();
+  };
 
-  function renderCategoryChart(encounters) {
+  function renderChart(data) {
     const counts = {};
-    encounters.forEach(e => {
-      counts[e.category] = (counts[e.category] || 0) + 1;
-    });
+    data.forEach(e => counts[e.category] = (counts[e.category] || 0) + 1);
 
     if (categoryChart) categoryChart.destroy();
 
@@ -116,27 +109,10 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "pie",
       data: {
         labels: Object.keys(counts),
-        datasets: [{
-          data: Object.values(counts),
-          backgroundColor: [
-            "#6c63ff",
-            "#ff9800",
-            "#4caf50",
-            "#03a9f4",
-            "#e91e63",
-            "#9c27b0"
-          ]
-        }]
+        datasets: [{ data: Object.values(counts) }]
       }
     });
   }
 
-  function formatDate(dateStr) {
-    return new Date(dateStr).toLocaleDateString("es-AR");
-  }
-
-  // ===============================
-  // INIT
-  // ===============================
-  loadEncounters();
+  load();
 });
