@@ -10,6 +10,7 @@
   <main>
     <h1>Friend Tracker</h1>
 
+    <!-- HOME / DASHBOARD -->
     <section class="stats">
       <div class="stat">
         <span id="totalEncounters">0</span>
@@ -21,30 +22,56 @@
       </div>
     </section>
 
-    <section class="form">
+    <section class="chart">
+      <h2>Encuentros por día</h2>
+      <div id="chartBars" class="bars"></div>
+    </section>
+
+    <button id="showFormBtn">➕ Agregar encuentro</button>
+
+    <!-- FORMULARIO -->
+    <section class="form hidden" id="formSection">
       <h2>Agregar encuentro</h2>
 
-      <label>
-        Fecha
-        <input type="date" id="dateInput" />
-      </label>
+      <button type="button" id="closeFormBtn">✖ Cerrar</button>
 
-      <label>
-        Hora
-        <input type="time" id="timeInput" />
-      </label>
+      <form id="encounterForm">
+        <label>
+          Fecha
+          <input type="date" id="dateInput" required />
+        </label>
 
-      <label>
-        Tipo
-        <select id="typeInput">
-          <option value="comida">🍽️ Comida</option>
-          <option value="deporte">🏓 Deporte</option>
-          <option value="viaje">✈️ Viaje</option>
-          <option value="social">🍺 Social</option>
-        </select>
-      </label>
+        <label>
+          Hora
+          <input type="time" id="timeInput" />
+        </label>
 
-      <label>
-        Nota
-        <input type="text" id="noteInput" placeholder="Ej: Pádel + cena" />
-      </label>
+        <label>
+          Tipo
+          <select id="typeInput">
+            <option value="comida">🍽️ Comida</option>
+            <option value="deporte">🏓 Deporte</option>
+            <option value="viaje">✈️ Viaje</option>
+            <option value="social">🍺 Social</option>
+          </select>
+        </label>
+
+        <label>
+          Nota
+          <input type="text" id="noteInput" placeholder="Ej: Pádel + cena" />
+        </label>
+
+        <button type="submit">Guardar encuentro</button>
+      </form>
+    </section>
+
+    <!-- HISTORIAL -->
+    <section class="history">
+      <h2>Historial</h2>
+      <div id="historyList"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
