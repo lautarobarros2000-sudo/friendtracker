@@ -7,6 +7,9 @@
 
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="logo.png" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -31,8 +34,14 @@
           <option value="Cena">Cena</option>
           <option value="Fútbol">Fútbol</option>
           <option value="Rancho">Rancho</option>
+          <option value="Viaje">Viaje</option>
           <option value="Otro">Otro</option>
         </select>
+      </label>
+
+      <label>
+        Nota
+        <textarea id="note" placeholder="¿Qué hicieron exactamente?" rows="3"></textarea>
       </label>
 
       <button type="submit">Guardar encuentro</button>
@@ -56,6 +65,12 @@
   <section class="list">
     <h2>Encuentros por día</h2>
     <div id="encountersList"></div>
+  </section>
+
+  <!-- GRAFICO -->
+  <section class="chart-section">
+    <h2>Encuentros por categoría</h2>
+    <canvas id="categoryChart"></canvas>
   </section>
 
   <script src="script.js"></script>
