@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   const supabase = window.supabase.createClient(
     "https://jvefzcnujhpqgyedmmxp.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2ZWZ6Y251amhwcWd5ZWRtbXhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NDAwODYsImV4cCI6MjA4NjMxNjA4Nn0.uA4GjxOThyoEbps9W2zcZfhHY6DNCS-QE_SgtpeDB5s"
+    "TU_PUBLIC_ANON_KEY"
   );
 
   // ===============================
@@ -70,6 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (error) {
       console.error("INSERT ERROR:", error);
+      alert("Error al guardar el encuentro");
       return;
     }
 
@@ -113,7 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
     totalDaysEl.textContent = uniqueDays;
     activeDaysEl.textContent = uniqueDays;
 
-    // Ritmo
     const today = new Date();
     const start = new Date(today.getFullYear(), 0, 1);
     const dayOfYear =
@@ -131,8 +131,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===============================
-  // LIST
+  // LIST (FIX TIMEZONE)
   // ===============================
+  function formatDate(dateStr) {
+    // dateStr viene como "YYYY-MM-DD"
+    const [year, month, day] = dateStr.split("-");
+    return `${day}/${month}/${year}`;
+  }
+
   function renderList(data) {
     listEl.innerHTML = "";
 
@@ -158,7 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <tbody>
             ${grouped[month].map(e => `
               <tr>
-                <td>${new Date(e.date).toLocaleDateString("es-AR")}</td>
+                <td>${formatDate(e.date)}</td>
                 <td>${e.category}</td>
                 <td>${e.note || ""}</td>
                 <td>${e.important ? "⭐" : ""}</td>
