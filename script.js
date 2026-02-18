@@ -1,21 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ===============================
-  // CONFIG
-  // ===============================
   const YEAR_GOAL = 150;
 
-  // ===============================
-  // SUPABASE
-  // ===============================
   const supabase = window.supabase.createClient(
     "https://jvefzcnujhpqgyedmmxp.supabase.co",
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2ZWZ6Y251amhwcWd5ZWRtbXhwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA3NDAwODYsImV4cCI6MjA4NjMxNjA4Nn0.uA4GjxOThyoEbps9W2zcZfhHY6DNCS-QE_SgtpeDB5s"
   );
 
-  // ===============================
-  // DOM
-  // ===============================
   const toggleFormBtn = document.getElementById("toggleFormBtn");
   const formSection = document.getElementById("formSection");
   const form = document.getElementById("encounterForm");
@@ -34,14 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const goalDaysEl = document.getElementById("goalDays");
   const paceEl = document.getElementById("pace");
 
+  // NUEVOS ELEMENTOS
+  const daysSeenEl = document.getElementById("daysSeen");
+  const daysElapsedEl = document.getElementById("daysElapsed");
+  const yearPercentEl = document.getElementById("yearPercent");
+
   const categoryChartCtx = document.getElementById("categoryChart");
   let categoryChart = null;
 
   goalDaysEl.textContent = YEAR_GOAL;
 
-  // ===============================
-  // TOGGLE FORM
-  // ===============================
   toggleFormBtn.onclick = () => {
     formSection.classList.toggle("hidden");
     if (!formSection.classList.contains("hidden")) {
@@ -49,9 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // ===============================
-  // SUBMIT
-  // ===============================
   form.onsubmit = async (e) => {
     e.preventDefault();
 
@@ -81,9 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   filterCategory.onchange = load;
 
-  // ===============================
-  // LOAD
-  // ===============================
   async function load() {
     const { data, error } = await supabase
       .from("encounters")
@@ -104,9 +91,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderChart(data);
   }
 
-  // ===============================
-  // STATS + OBJETIVO
-  // ===============================
   function renderStats(data) {
     const uniqueDays = new Set(data.map(e => e.date)).size;
 
@@ -116,9 +100,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const today = new Date();
     const start = new Date(today.getFullYear(), 0, 1);
+
     const dayOfYear =
       Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
 
+    // NUEVA SECCIÓN
+    daysSeenEl.textContent = uniqueDays;
+    daysElapsedEl.textContent = dayOfYear;
+
+    const percent = dayOfYear === 0
+      ? 0
+      : Math.round((uniqueDays / dayOfYear) * 100);
+
+    yearPercentEl.textContent = percent + "%";
+
+    // Ritmo vs objetivo anual
     const expectedByNow = Math.round((YEAR_GOAL / 365) * dayOfYear);
 
     if (uniqueDays >= expectedByNow) {
@@ -130,11 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ===============================
-  // LIST (FIX TIMEZONE)
-  // ===============================
   function formatDate(dateStr) {
-    // dateStr viene como "YYYY-MM-DD"
     const [year, month, day] = dateStr.split("-");
     return `${day}/${month}/${year}`;
   }
@@ -189,9 +181,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ===============================
-  // CHART
-  // ===============================
   function renderChart(data) {
     const counts = {};
     data.forEach(e => {
@@ -211,4 +200,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
   load();
 });
-
